@@ -22,4 +22,11 @@
       ¿No tienes cuenta? <a routerLink="/register">Regístrate aquí</a>
     </div>
   </div>
+
+  @if (sessionExpiredMessage()) {
+  <div class="session-toast">
+    Tu sesión ha expirado. Por favor, inicia sesión de nuevo.
+  </div>
+  }
+
 </div>

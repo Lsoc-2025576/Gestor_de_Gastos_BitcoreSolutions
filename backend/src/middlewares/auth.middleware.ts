@@ -6,8 +6,7 @@ export interface AuthenticatedRequest extends Request {
 }
 
 export const authenticateToken = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1]; // Formato esperado: "Bearer <TOKEN>"
+  const token = req.cookies?.token;
 
   if (!token) {
     return res.status(401).json({ message: 'Acceso denegado. Token no proporcionado.' });

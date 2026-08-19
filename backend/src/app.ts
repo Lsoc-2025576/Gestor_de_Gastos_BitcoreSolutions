@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import { testDbConnection } from './config/database.js';
 import authRoutes from './routes/auth.routes.js';
 import { authenticateToken, type AuthenticatedRequest } from './middlewares/auth.middleware.js';
@@ -8,12 +9,14 @@ import { authenticateToken, type AuthenticatedRequest } from './middlewares/auth
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:4200',
+  credentials: true,
+}));
+app.use(cookieParser());
 app.use(express.json());
 
-
 testDbConnection();
-
 
 app.use('/api/auth', authRoutes);
 

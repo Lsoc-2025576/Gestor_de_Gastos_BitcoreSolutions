@@ -29,12 +29,25 @@ export class AuthController {
       }
 
       const data = await AuthService.loginUser(email, password);
+
+      res.cookie('token', data.token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 60 * 1000, // debe coincidir con JWT_EXPIRES_IN
+      });
+
       return res.status(200).json({
         message: 'Inicio de sesión exitoso',
-        ...data,
+        user: data.user, // ya no mandamos el token en el body
       });
     } catch (error: any) {
       return res.status(401).json({ message: error.message || 'Error de autenticación' });
     }
+  }
+
+  static logout(req: Request, res: Response) {
+    res.clearCookie('token');
+    return res.status(200).json({ message: 'Sesión cerrada' });
   }
 }
